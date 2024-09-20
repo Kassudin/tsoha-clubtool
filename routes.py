@@ -47,6 +47,11 @@ def register():
 # Route to event creation page
 @app.route("/new_event")
 def new():
+    allow = False
+    if users.is_coach():
+        allow = True
+    if not allow:
+        return render_template ("error.html", message="Ei oikeutta nähdä sivua")
     return render_template("new_event.html")
 
 # Route to create a new event

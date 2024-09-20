@@ -16,7 +16,9 @@ Kuvaus: {{ event.event_description }}
 <p>Ei tulevia tapahtumia.</p>
 {% endif %}
 Olet kirjautunut sisään.
+{% if session.coach %}
 <a href="/new_event">Luo uusi tapahtuma</a> |
+{% endif %}
 <a href="/logout">Kirjaudu ulos</a>
 {% else %}
 <a href="/login">Kirjaudu sisään</a>
