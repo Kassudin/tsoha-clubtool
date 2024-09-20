@@ -63,8 +63,3 @@ def create_event():
         if success:
             return redirect("/")
         return render_template("error.html", message="Tapahtuman luominen epäonnistui.")
-
-
-
-    
-
