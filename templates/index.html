@@ -1,0 +1,23 @@
+CLUBTOOL
+<hr>
+{% if session.user_id %}
+{% if events %}
+<ul>
+{% for event in events %}
+<li>
+<strong>{{ event.event_type }}</strong> - {{ event.event_date.strftime("%Y-%m-%d") }} klo {{ event.event_start_time.strftime("%H:%M") }} - {{ event.event_end_time.strftime("%H:%M") }}<br>
+Sijainti: {{ event.event_location }}<br>
+Kuvaus: {{ event.event_description }}
+</li>
+<hr>
+{% endfor %}
+</ul>
+{% else %}
+<p>Ei tulevia tapahtumia.</p>
+{% endif %}
+Olet kirjautunut sisään.
+<a href="/new_event">Luo uusi tapahtuma</a> |
+<a href="/logout">Kirjaudu ulos</a>
+{% else %}
+<a href="/login">Kirjaudu sisään</a>
+{% endif %}

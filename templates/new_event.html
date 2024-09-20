@@ -1,0 +1,19 @@
+<form action="/new_event" method="post">
+    Tapahtuma: <br>
+    <input type="radio" name="event_type" value="harjoitus" checked> harjoitus
+    <input type="radio" name="event_type" value="ottelu"> ottelu
+    <input type="radio" name="event_type" value="muu"> muu
+    <p>
+    Päivämäärä: <input type="date" name="event_date">
+    <p>
+    Tapahtuma alkaa: <input type="time" name="event_start_time">
+    Tapahtuma päättyy <input type="time" name="event_end_time">
+    <p>
+    Tapahtumapaikka: <input type="text" name="event_location"> 
+    <p>
+    Lisätiedot: <br>
+    <textarea name="event_description" rows="4" cols="40"></textarea> 
+    <input type="submit" value="Luo tapahtuma">
+</form>
+
+

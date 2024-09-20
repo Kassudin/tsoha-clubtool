@@ -1,0 +1,24 @@
+<form action="/register" method="post">
+Nimi: <input type="text" name="player_name" required>
+<p>
+Salasana: <input type="password1" name="password1" required>
+<p>
+Salasana uudestaan: <input type="password" name="password2" required>
+<p>
+Valitse pelipaikka:
+<select name="player_position" required>
+    <option value="" selected> Ei valittu
+    <option value="maalivahti"> Maalivahti
+    <option value="puolustaja"> Puolustaja
+    <option value="keskikenttä"> Keskikenttä
+    <option value="hyökkääjä"> Hyökkääjä
+</select>
+<p>
+Valitse pelinumero: <input type="number" name="player_number" min="1" max="99">
+<p>
+<input type="submit" value="Rekisteröidy">
+</form>
+    
+
+
+    
