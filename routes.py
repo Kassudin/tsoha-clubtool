@@ -26,7 +26,6 @@ def logout():
     users.logout()
     return redirect("/")
 
-
 # Route to user registration
 @app.route("/register", methods=["GET","POST"])
 def register():
@@ -41,7 +40,7 @@ def register():
         if password1!=password2:
             return render_template("error.html", message="Salasanat eroavat")
         if users.register(player_name, password1, player_position, player_number):
-            return redirect("/login")
+            return redirect("/")
         return render_template("error.html", message="Tapahtui virhe rekisteröitymisessä")
 
 # Route to event creation page
@@ -69,7 +68,7 @@ def create_event():
             return redirect("/")
         return render_template("error.html", message="Tapahtuman luominen epäonnistui.")
 
-# Route to register user to an event   
+# Route to register the user to the event   
 @app.route("/event_registration", methods=["POST"])
 def event_registration():
     if not users.user_id:

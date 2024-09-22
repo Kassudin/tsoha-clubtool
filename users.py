@@ -22,9 +22,13 @@ def logout():
 
 def register(player_name ,password, player_position, player_number):
 	hash_value = generate_password_hash(password)
-	sql = text('INSERT INTO users (player_name, password, position, player_number) VALUES (:player_name, :password, :position, :player_number)')
-	db.session.execute(sql, {"player_name": player_name, "password": hash_value, "position": player_position, "player_number": player_number})
-	db.session.commit()
+	try:
+		sql = text('INSERT INTO users (player_name, password, position, player_number) VALUES (:player_name, :password, :position, :player_number)')
+		db.session.execute(sql, {"player_name": player_name, "password": hash_value, "position": player_position, "player_number": player_number})
+		db.session.commit()
+	except:
+		return False
+	return login(player_name, password)
 
 def user_id():
 	return session.get("user_id", 0)
