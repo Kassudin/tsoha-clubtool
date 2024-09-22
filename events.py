@@ -14,7 +14,14 @@ def create_event(event_type, event_date, event_start_time, event_end_time, event
     return True
 
 def get_list():
-    result = db.session.execute(text("SELECT id, event_type, event_date, event_start_time, event_end_time, event_location, event_description FROM events"))
+    result = db.session.execute(text("""
+        SELECT e.id, e.event_type, e.event_date, e.event_start_time, e.event_end_time, e.event_location, e.event_description,
+        COUNT(CASE WHEN er.status = 'IN' THEN 1 END) AS in_count,
+        COUNT(CASE WHEN er.status = 'OUT' THEN 1 END) AS out_count
+        FROM events e
+        LEFT JOIN event_registrations er ON e.id = er.event_id
+        GROUP BY e.event_date, e.event_start_time, e.id
+    """))
     return result.fetchall()
 
 def register_user_to_event(event_id, user_id, status):
