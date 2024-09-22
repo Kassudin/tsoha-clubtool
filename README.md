@@ -54,8 +54,8 @@ Ohjeet sovelluksen testaamiseen:
    ```
 - Käynnistä sovellus komennolla:
    ```
-   flask run
-    ```
+  (venv) $ flask run
+   ```
 
 
    
