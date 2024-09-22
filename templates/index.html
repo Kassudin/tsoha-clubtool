@@ -9,12 +9,19 @@ CLUBTOOL
 Sijainti: {{ event.event_location }}<br>
 Kuvaus: {{ event.event_description }}<br>
 IN: {{ event.in_count }} <br>
-OUT: {{ event.out_count }}
+OUT: {{ event.out_count }} <br>
 <form action="/event_registration" method="post">
     <input type="submit" name="status" value="IN">
     <input type="submit" name="status" value="OUT">
     <input type="hidden" name="event_id" value="{{ event.id }}">
     <input type="hidden" name="user_id" value="{{ session.user_id }}">
+{% if event.current_status == 'IN' %}
+Olet IN
+{% elif event.current_status == 'OUT' %}
+Olet OUT
+{% else %}
+Et ole vielä ilmoittautunut tapahtumaan!
+{% endif %}
 </form>
 </li>
 <hr>
