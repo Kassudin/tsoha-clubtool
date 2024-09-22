@@ -6,7 +6,7 @@ import users, events
 @app.route("/")
 def index():
     event_list = events.get_list()
-    return render_template("index.html", events = event_list)        
+    return render_template("index.html", events = event_list)   
         
 # Route to login page
 @app.route("/login", methods=["GET","POST"])
@@ -68,3 +68,14 @@ def create_event():
         if success:
             return redirect("/")
         return render_template("error.html", message="Tapahtuman luominen epäonnistui.")
+
+# Route to register user to an event   
+@app.route("/event_registration", methods=["POST"])
+def event_registration():
+    if not users.user_id:
+        return redirect("/login")
+    event_id = request.form["event_id"]
+    status = request.form["status"]
+    user_id = users.user_id()
+    events.register_user_to_event(event_id, user_id, status)
+    return redirect("/")
