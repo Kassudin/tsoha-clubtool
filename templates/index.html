@@ -5,9 +5,8 @@ CLUBTOOL
 <ul>
 {% for event in events %}
 <li>
-<strong>{{ event.event_type }}</strong> - {{ event.event_date.strftime("%Y-%m-%d") }} klo {{ event.event_start_time.strftime("%H:%M") }} - {{ event.event_end_time.strftime("%H:%M") }}<br>
+<strong><a href="/event/{{ event.id }}">{{ event.event_type }}</a></strong> - {{ event.event_date.strftime("%Y-%m-%d") }} klo {{ event.event_start_time.strftime("%H:%M") }} - {{ event.event_end_time.strftime("%H:%M") }}<br>
 Sijainti: {{ event.event_location }}<br>
-Kuvaus: {{ event.event_description }}<br>
 IN: {{ event.in_count }} <br>
 OUT: {{ event.out_count }} <br>
 <form action="/event_registration" method="post">

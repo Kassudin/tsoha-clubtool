@@ -1,0 +1,21 @@
+<h1>Tapahtuman tiedot: {{ event.event_type }}</h1>
+<p>Päivämäärä: {{ event.event_date.strftime("%Y-%m-%d") }}</p>
+<p>Aloitusaika: {{ event.event_start_time.strftime("%H:%M") }}</p>
+<p>Lopetusaika: {{ event.event_end_time.strftime("%H:%M") }}</p>
+<p>Sijainti: {{ event.event_location }}</p>
+<p>Lisätiedot: {{ event.event_description }}</p>
+
+<h2>Osallistuvat:</h2>
+<ul>
+{% for name in in_list %}
+<li>{{ name }}</li>
+{% endfor %}
+</ul>
+
+<h2>Ei osallistu:</h2>
+<ul>
+{% for name in out_list %}
+<li>{{ name }}</li>
+{% endfor %}
+</ul>
+
