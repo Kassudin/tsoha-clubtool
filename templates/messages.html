@@ -1,0 +1,14 @@
+{% if messages %}
+    {% for message in messages %}
+        <div>
+            <p><strong>{{ message.player_name }}</strong>: {{ message.content }}</p>
+            <p>Lähetetty {{ message.sent_at.strftime("%Y-%m-%d %H:%M") }}</p>
+            <hr> 
+        </div>
+    {% endfor %}
+{% else %}
+    <p>Ei viestejä valmentajalta.</p>
+{% endif %}
+<p>
+    <a href="/">Palaa tapahtumiin</a>
+</p>

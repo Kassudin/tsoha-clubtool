@@ -1,6 +1,6 @@
 from app import app
-from flask import render_template, request, redirect
-import users, events
+from flask import render_template, request, redirect, session
+import users, events, messages
 
 # Route to front page
 @app.route("/")
@@ -71,7 +71,7 @@ def create_event():
 # Route to register the user to the event   
 @app.route("/event_registration", methods=["POST"])
 def event_registration():
-    if not users.user_id:
+    if not users.user_id():
         return redirect("/login")
     event_id = request.form["event_id"]
     status = request.form["status"]
@@ -84,3 +84,34 @@ def event_registration():
 def event_details(event_id):
     event_info, in_list, out_list = events.get_event_details(event_id)
     return render_template("event_details.html", event=event_info, in_list=in_list, out_list=out_list)
+
+# Route to message creation page
+@app.route("/send_message")
+def send_message_form():
+    if not users.user_id:
+        return redirect('/login')
+    if not users.is_coach():
+        return render_template("error.html", message="Vain valmentajat voivat lähettää viestejä.")
+    return render_template("send_message.html")
+
+# Route to send a new message
+@app.route("/send_message", methods=["POST"])
+def send_message():
+    if not users.user_id():
+        return redirect('/login')
+    if not users.is_coach():
+        return render_template("error.html", message="Vain valmentajat voivat lähettää viestejä.")
+    content = request.form.get("content")
+    success = messages.send_message(content)
+    if success:
+        return redirect("/messages")
+    else:
+        return render_template("error.html", message="Viestin lähetys epäonnistui.")
+
+# Route to view the messages 
+@app.route("/messages")
+def view_messages():
+    if not users.user_id:
+        return redirect('/login')
+    message_list = messages.get_all_messages()
+    return render_template("messages.html", messages=message_list)
