@@ -16,7 +16,7 @@ def create_event(event_type, event_date, event_start_time, event_end_time, event
 
 def get_list():
     sql = text("""
-        SELECT e.id, e.event_type, e.event_date, e.event_start_time, e.event_end_time, e.event_location, e.event_description,
+        SELECT e.id, e.event_type, e.event_date, e.event_start_time, e.event_end_time, e.event_location, 
         COUNT(CASE WHEN er.status = 'IN' THEN 1 END) AS in_count,
         COUNT(CASE WHEN er.status = 'OUT' THEN 1 END) AS out_count,
         (SELECT status FROM event_registrations WHERE event_id = e.id AND user_id = :user_id) AS current_status                             
@@ -33,3 +33,21 @@ def register_user_to_event(event_id, user_id, status):
     db.session.execute(sql, {"event_id": event_id, "user_id": user_id, "status": status})
     db.session.commit()
     return True
+
+def get_event_details(event_id):
+    sql_event = text("""
+        SELECT e.id, e.event_type, e.event_date, e.event_start_time, e.event_end_time, e.event_location, e.event_description FROM events e WHERE id = :event_id
+    """)
+    event_info = db.session.execute(sql_event, {"event_id": event_id}).fetchone()
+
+    sql_registrations = text("""
+        SELECT u.player_name, er.status FROM event_registrations er
+        JOIN users u ON u.id = er.user_id
+        WHERE er.event_id = :event_id
+    """)
+    registrations = db.session.execute(sql_registrations, {"event_id": event_id}).fetchall()
+    
+    in_list = [reg.player_name for reg in registrations if reg.status == 'IN']
+    out_list = [reg.player_name for reg in registrations if reg.status == 'OUT']
+    
+    return event_info, in_list, out_list

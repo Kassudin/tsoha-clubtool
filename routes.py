@@ -78,3 +78,9 @@ def event_registration():
     user_id = users.user_id()
     events.register_user_to_event(event_id, user_id, status)
     return redirect("/")
+
+# Route to event details page
+@app.route("/event/<int:event_id>")
+def event_details(event_id):
+    event_info, in_list, out_list = events.get_event_details(event_id)
+    return render_template("event_details.html", event=event_info, in_list=in_list, out_list=out_list)
