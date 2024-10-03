@@ -8,7 +8,7 @@ CREATE TABLE user_details(
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id),
     player_position TEXT,
-    player_number INTEGER
+    player_number INTEGER UNIQUE
 );
 CREATE TABLE events (
     id SERIAL PRIMARY KEY, 
