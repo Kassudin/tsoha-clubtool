@@ -2,12 +2,16 @@ CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     player_name TEXT UNIQUE,
     password TEXT,
-    player_number INTEGER UNIQUE,
-    position TEXT,
     coach BOOLEAN DEFAULT FALSE
 );
-CREATE TABLE events (
+CREATE TABLE user_details(
     id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id),
+    player_position TEXT,
+    player_number INTEGER
+);
+CREATE TABLE events (
+    id SERIAL PRIMARY KEY, 
     event_type TEXT,
     event_date DATE NOT NULL,
     event_start_time TIME NOT NULL,
