@@ -1,10 +1,13 @@
 from app import app
 from flask import render_template, request, redirect
 import users, events, messages
+import datetime
 
 # Route to front page
 @app.route("/")
 def index():
+    if not users.user_id:
+        return render_template ("error.html", message="Ei oikeutta nähdä sivua")
     event_list = events.get_list()
     user_id = users.user_id()
     event_registration_count, total_events = events.get_registration_count(user_id), events.get_total_events()
@@ -42,6 +45,13 @@ def register():
         player_number=request.form["player_number"]
         if password1!=password2:
             return render_template("error.html", message="Salasanat eroavat")
+        if not 3 <= len(player_name) <= 30:
+            return render_template("error.html", message="Virheellinen nimi")
+        allowed_positions = ["maalivahti", "puolustaja", "keskikenttä", "hyökkääjä"]
+        if player_position not in allowed_positions:
+            return render_template("error.html", message="Virheellinen pelipaikka")
+        if not player_number.isdigit() or not (1 <= int(player_number) <= 99):
+            return render_template("error.html", message="Pelaajanumeron tulee olla luku väliltä 1-99")
         if users.register(player_name, password1, player_position, player_number):
             return redirect("/")
         return render_template("error.html", message="Tapahtui virhe rekisteröitymisessä")
@@ -57,19 +67,27 @@ def new():
     return render_template("new_event.html")
 
 # Route to create a new event
-@app.route("/new_event", methods=["GET", "POST"])
+@app.route("/new_event", methods=["POST"])
 def create_event():
-    if request.method == "POST":
-        event_type = request.form.get("event_type")
-        event_date = request.form.get("event_date")
-        event_start_time = request.form.get("event_start_time")
-        event_end_time = request.form.get("event_end_time")
-        event_location = request.form.get("event_location")
-        event_description = request.form.get("event_description", "")  
-        success = events.create_event(event_type, event_date, event_start_time, event_end_time, event_location, event_description)
-        if success:
-            return redirect("/")
-        return render_template("error.html", message="Tapahtuman luominen epäonnistui.")
+    if not users.is_coach():
+        return render_template("error.html", message="Vain valmentajat voivat luoda tapahtumia.")
+    event_type = request.form.get("event_type")
+    event_date = request.form.get("event_date")
+    event_start_time = request.form.get("event_start_time")
+    event_end_time = request.form.get("event_end_time")
+    event_location = request.form.get("event_location")
+    event_description = request.form.get("event_description", "")  
+    allowed_event_types = ["harjoitus", "ottelu", "muu"]
+    if event_type not in allowed_event_types:
+        return render_template("error.html", message="Virheellinen tapahtumatyyppi")
+    if not 1 <= len(event_location) <= 100:
+        return render_template("error.html", message="Tapahtumapaikan tulee olla 1-100 merkkiä pitkä")
+    if len(event_description) > 100:
+        return render_template("error.html", message="Kuvaus on liian pitkä (max 100 merkkiä)")
+    success = events.create_event(event_type, event_date, event_start_time, event_end_time, event_location, event_description)
+    if success:
+        return redirect("/")
+    return render_template("error.html", message="Tapahtuman luominen epäonnistui")
 
 # Route to register the user to the event   
 @app.route("/event_registration", methods=["POST"])
