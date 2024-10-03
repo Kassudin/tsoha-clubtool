@@ -35,3 +35,9 @@ def user_id():
 
 def is_coach():
 	return session.get("coach", False)
+
+def player_name(user_id):
+    sql = text("SELECT player_name FROM users WHERE id = :user_id")
+    result = db.session.execute(sql, {'user_id': user_id})
+    user = result.fetchone()
+    return user.player_name if user else None
