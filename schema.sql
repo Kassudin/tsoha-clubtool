@@ -1,6 +1,6 @@
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
-    player_name TEXT UNIQUE,
+    player_name TEXT,
     password TEXT,
     coach BOOLEAN DEFAULT FALSE
 );
