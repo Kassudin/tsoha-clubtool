@@ -6,7 +6,9 @@ import users, events, messages
 @app.route("/")
 def index():
     event_list = events.get_list()
-    return render_template("index.html", events = event_list)   
+    user_id = users.user_id()
+    welcome_message = f"Hei {users.player_name(user_id)}!"
+    return render_template("index.html", events = event_list, welcome_message=welcome_message)   
         
 # Route to login page
 @app.route("/login", methods=["GET","POST"])

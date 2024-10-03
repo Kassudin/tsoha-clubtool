@@ -1,6 +1,7 @@
 CLUBTOOL
 <hr>
 {% if session.user_id %}
+<h2>{{ welcome_message }}</h2>
 {% if events %}
 <ul>
 {% for event in events %}
