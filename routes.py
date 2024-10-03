@@ -7,10 +7,11 @@ import users, events, messages
 def index():
     event_list = events.get_list()
     user_id = users.user_id()
-    welcome_message = f"Hei {users.player_name(user_id)}!"
+    event_registration_count, total_events = events.get_registration_count(user_id), events.get_total_events()
+    welcome_message = f"Hei {users.player_name(user_id)}, olet ilmoittautunut {event_registration_count}/{total_events} tapahtumaan!"
     return render_template("index.html", events = event_list, welcome_message=welcome_message)   
         
-# Route to login page
+# Route to login page 
 @app.route("/login", methods=["GET","POST"])
 def login():
     if request.method == "GET":

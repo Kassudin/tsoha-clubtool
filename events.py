@@ -51,3 +51,19 @@ def get_event_details(event_id):
     out_list = [reg.player_name for reg in registrations if reg.status == 'OUT']
     
     return event_info, in_list, out_list
+
+def get_registration_count(user_id):
+    sql = text("""
+        SELECT COUNT(*) 
+        FROM event_registrations 
+        WHERE user_id = :user_id
+    """)
+    result = db.session.execute(sql, {"user_id": user_id})
+    registration_count = result.fetchone()[0]
+    return registration_count
+
+def get_total_events():
+    sql = text("SELECT COUNT(*) FROM events")
+    result = db.session.execute(sql)
+    total_events = result.fetchone()[0]
+    return total_events
