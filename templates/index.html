@@ -33,10 +33,10 @@ Et ole vielä ilmoittautunut tapahtumaan!
 Olet kirjautunut sisään.
 {% if session.coach %}
 <a href="/new_event">Luo uusi tapahtuma</a> |
-<a href="/send_message">Lähetä viesti</a>
+<a href="/send_message">Lähetä viesti</a> |
 {% endif %}
-<a href="/logout">Kirjaudu ulos</a>
-<a href="/messages">Viestit</a>
+<a href="/messages">Viestit</a> |
+<a href="/logout">Kirjaudu ulos</a> 
 {% else %}
-<a href="/login">Kirjaudu sisään</a>
+<a href="/login">Kirjaudu sisään</a> 
 {% endif %}
