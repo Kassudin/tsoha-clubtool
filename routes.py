@@ -80,6 +80,10 @@ def create_event():
     allowed_event_types = ["harjoitus", "ottelu", "muu"]
     if event_type not in allowed_event_types:
         return render_template("error.html", message="Virheellinen tapahtumatyyppi")
+    if not event_date:
+        return render_template("error.html", message="Päivämäärä on pakollinen")
+    if not event_start_time or not event_end_time:
+        return render_template("error.html", message="Aloitus- ja lopetusaika ovat pakollisia")
     if not 1 <= len(event_location) <= 100:
         return render_template("error.html", message="Tapahtumapaikan tulee olla 1-100 merkkiä pitkä")
     if len(event_description) > 100:
