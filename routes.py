@@ -136,7 +136,7 @@ def send_message():
 # Route to view the messages 
 @app.route("/messages")
 def view_messages():
-    if not users.user_id:
+    if not users.user_id():
         return redirect('/login')
     message_list = messages.get_all_messages()
     return render_template("messages.html", messages=message_list)
