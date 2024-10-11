@@ -127,6 +127,8 @@ def send_message():
     if not users.is_coach():
         return render_template("error.html", message="Vain valmentajat voivat lähettää viestejä.")
     content = request.form.get("content")
+    if not 1 <= len(content) <= 100:
+        return render_template("error.html", message="Viestin tulee olla 1-100 merkkiä pitkä")
     success = messages.send_message(content)
     if success:
         return redirect("/messages")
