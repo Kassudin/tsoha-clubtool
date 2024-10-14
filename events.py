@@ -16,7 +16,7 @@ def create_event(event_type, event_date, event_start_time, event_end_time, event
 
 def get_list():
     sql = text("""
-        SELECT e.id, e.event_type, e.event_date, e.event_start_time, e.event_end_time, e.event_location, 
+        SELECT e.id, e.event_type, e.event_date, e.event_start_time, e.event_end_time, e.event_location, e.is_cancelled,
         COUNT(CASE WHEN er.status = 'IN' THEN 1 END) AS in_count,
         COUNT(CASE WHEN er.status = 'OUT' THEN 1 END) AS out_count,
         (SELECT status FROM event_registrations WHERE event_id = e.id AND user_id = :user_id) AS current_status                             
@@ -67,3 +67,9 @@ def get_total_events():
     result = db.session.execute(sql)
     total_events = result.fetchone()[0]
     return total_events
+
+def cancel_event(event_id):
+    sql = text("UPDATE events SET is_cancelled = TRUE WHERE id = :event_id")
+    db.session.execute(sql, {"event_id": event_id})
+    db.session.commit()
+    return True

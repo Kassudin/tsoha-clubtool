@@ -142,3 +142,12 @@ def view_messages():
         return redirect('/login')
     message_list = messages.get_all_messages()
     return render_template("messages.html", messages=message_list)
+
+@app.route("/cancel_event/<int:event_id>", methods=["POST"])
+def cancel_event(event_id):
+    if not users.is_coach():
+        return render_template("error.html", message="Vain valmentajat voivat peruuttaa tapahtumia")
+    if events.cancel_event(event_id):
+        return redirect("/")
+    else:
+        return render_template("error.html", message="Tapahtui virhe peruuttamisessa")
