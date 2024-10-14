@@ -1,3 +1,6 @@
+{% extends "layout.html" %}
+{% block title %}Uusitapahtuma{% endblock %}
+{% block content %}
 <form action="/new_event" method="post">
     Tapahtuma: <br>
     <input type="radio" name="event_type" value="harjoitus" checked> harjoitus
@@ -15,5 +18,5 @@
     <textarea name="event_description" rows="4" cols="40"></textarea> 
     <input type="submit" value="Luo tapahtuma">
 </form>
-
+{% endblock %}
 

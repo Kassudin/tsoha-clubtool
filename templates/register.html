@@ -1,3 +1,6 @@
+{% extends "layout.html" %}
+{% block title %}Rekisteröinti{% endblock %}
+{% block content %}
 <form action="/register" method="post">
 Nimi: <input type="text" name="player_name" required>
 <p>
@@ -18,7 +21,7 @@ Valitse pelinumero: <input type="number" name="player_number" min="1" max="99">
 <p>
 <input type="submit" value="Rekisteröidy">
 </form>
-    
+{% endblock %}
 
 
     

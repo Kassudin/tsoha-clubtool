@@ -1,3 +1,6 @@
+{% extends "layout.html" %}
+{% block title %}Tapahtumantiedot{% endblock %}
+{% block content %}
 <h1>Tapahtuman tiedot: {{ event.event_type }}</h1>
 <p>Päivämäärä: {{ event.event_date.strftime("%Y-%m-%d") }}</p>
 <p>Aloitusaika: {{ event.event_start_time.strftime("%H:%M") }}</p>
@@ -18,4 +21,4 @@
 <li>{{ name }}</li>
 {% endfor %}
 </ul>
-
+{% endblock %}

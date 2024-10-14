@@ -1,3 +1,6 @@
+{% extends "layout.html" %}
+{% block title %}Kirjautumissivu{% endblock %}
+{% block content %}
 <form action="/login" method="post">
 Nimi: <input type="text" name="player_name">
 <p>
@@ -7,3 +10,4 @@ Salasana: <input type="password" name="password">
 </form>
 
 Jos et ole vielä rekisteröitynyt, voit tehdä sen <a href="/register">tästä</a>
+{% endblock %}

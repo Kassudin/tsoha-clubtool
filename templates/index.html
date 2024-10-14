@@ -1,5 +1,6 @@
-CLUBTOOL
-<hr>
+{% extends "layout.html" %}
+{% block title %}Etusivu{% endblock %}
+{% block content %}
 {% if session.user_id %}
 <h2>{{ welcome_message }}</h2>
 {% if events %}
@@ -44,9 +45,8 @@ Olet kirjautunut sisään.
 <a href="/new_event">Luo uusi tapahtuma</a> |
 <a href="/send_message">Lähetä viesti</a> |
 {% endif %}
-<a href="/messages">Viestit</a> |
 <a href="/logout">Kirjaudu ulos</a> 
 {% else %}
 <a href="/login">Kirjaudu sisään</a> 
 {% endif %}
-
+{% endblock %}

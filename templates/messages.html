@@ -1,3 +1,6 @@
+{% extends "layout.html" %}
+{% block title %}viestit{% endblock %}
+{% block content %}
 {% if messages %}
     {% for message in messages %}
         <div>
@@ -9,6 +12,4 @@
 {% else %}
     <p>Ei viestejä valmentajalta.</p>
 {% endif %}
-<p>
-    <a href="/">Palaa tapahtumiin</a>
-</p>
+{% endblock %}
