@@ -15,8 +15,8 @@ Sijainti: {{ event.event_location }}<br>
 IN: {{ event.in_count }} <br>
 OUT: {{ event.out_count }} <br>
 <form action="/event_registration" method="post">
-    <input type="submit" name="status" value="IN">
-    <input type="submit" name="status" value="OUT">
+    <button type="submit" name="status" value="IN" class="btn {% if event.current_status == 'IN' %}btn-success{% else %}btn-outline-success{% endif %}">IN</button>
+    <button type="submit" name="status" value="OUT" class="btn {% if event.current_status == 'OUT' %}btn-danger{% else %}btn-outline-danger{% endif %}">OUT</button>
     <input type="hidden" name="event_id" value="{{ event.id }}">
     <input type="hidden" name="user_id" value="{{ session.user_id }}">
 {% if event.current_status == 'IN' %}
@@ -30,6 +30,7 @@ Et ole vielä ilmoittautunut tapahtumaan!
 {% if session.coach %}
 <form action="/cancel_event/{{ event.id }}" method="post">
     <button type="submit">Cancel Event</button>
+</form>
 {% endif %}
 </form>
 {% endif %}
