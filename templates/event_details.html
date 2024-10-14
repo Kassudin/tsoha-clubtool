@@ -7,14 +7,12 @@
 <p>Lopetusaika: {{ event.event_end_time.strftime("%H:%M") }}</p>
 <p>Sijainti: {{ event.event_location }}</p>
 <p>Lisätiedot: {{ event.event_description }}</p>
-
 <h2>Osallistuvat:</h2>
 <ul>
 {% for name in in_list %}
 <li>{{ name }}</li>
 {% endfor %}
 </ul>
-
 <h2>Ei osallistu:</h2>
 <ul>
 {% for name in out_list %}
