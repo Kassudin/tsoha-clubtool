@@ -44,3 +44,18 @@ def player_name(user_id):
     result = db.session.execute(sql, {'user_id': user_id})
     user = result.fetchone()
     return user.player_name if user else None
+
+
+def get_user_position(user_id):
+    sql = text("""
+        SELECT ud.player_position
+        FROM user_details ud
+        JOIN users u ON ud.user_id = u.id
+        WHERE u.id = :user_id
+    """)
+    result = db.session.execute(sql, {"user_id": user_id})
+    user_position = result.fetchone()
+    if user_position:
+        return user_position[0]
+    else:
+        return None
