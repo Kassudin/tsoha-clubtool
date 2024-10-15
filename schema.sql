@@ -25,6 +25,7 @@ CREATE TABLE event_registrations (
     user_id INTEGER REFERENCES users(id),
     event_id INTEGER REFERENCES events(id),
     status TEXT,
+    comment TEXT,
     UNIQUE (event_id, user_id)
 );
 CREATE TABLE messages (
