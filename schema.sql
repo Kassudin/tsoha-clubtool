@@ -18,7 +18,8 @@ CREATE TABLE events (
     event_end_time TIME NOT NULL,
     event_location TEXT NOT NULL,
     event_description TEXT,
-    is_cancelled BOOLEAN DEFAULT FALSE
+    is_cancelled BOOLEAN DEFAULT FALSE,
+    position_specific TEXT
 );
 CREATE TABLE event_registrations (
     user_id INTEGER REFERENCES users(id),
