@@ -77,6 +77,7 @@ def create_event():
     event_end_time = request.form.get("event_end_time")
     event_location = request.form.get("event_location")
     event_description = request.form.get("event_description", "")  
+    position_specific = request.form.get("position_specific", None)
     allowed_event_types = ["harjoitus", "ottelu", "muu"]
     if event_type not in allowed_event_types:
         return render_template("error.html", message="Virheellinen tapahtumatyyppi")
@@ -88,7 +89,7 @@ def create_event():
         return render_template("error.html", message="Tapahtumapaikan tulee olla 1-100 merkkiä pitkä")
     if len(event_description) > 100:
         return render_template("error.html", message="Kuvaus on liian pitkä (max 100 merkkiä)")
-    success = events.create_event(event_type, event_date, event_start_time, event_end_time, event_location, event_description)
+    success = events.create_event(event_type, event_date, event_start_time, event_end_time, event_location, event_description, position_specific)
     if success:
         return redirect("/")
     return render_template("error.html", message="Tapahtuman luominen epäonnistui")

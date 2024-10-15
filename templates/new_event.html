@@ -16,6 +16,16 @@
     <p>
     Lisätiedot: <br>
     <textarea name="event_description" rows="4" cols="40"></textarea> 
+    <p>
+    Kenelle: 
+    <select name="position_specific">
+        <option value="">Kaikille</option>
+        <option value="maalivahti">Maalivahti</option>
+        <option value="puolustaja">Puolustaja</option>
+        <option value="keskikenttä">Keskikenttä</option>
+        <option value="hyökkääjä">Hyökkääjä</option>
+    </select>
+    <p>
     <input type="submit" value="Luo tapahtuma">
 </form>
 {% endblock %}
