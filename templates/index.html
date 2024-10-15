@@ -7,33 +7,36 @@
 <ul>
 {% for event in events %}
 <li>
-<strong><a href="/event/{{ event.id }}">{{ event.event_type }}</a></strong> - {{ event.event_date.strftime("%Y-%m-%d") }} klo {{ event.event_start_time.strftime("%H:%M") }} - {{ event.event_end_time.strftime("%H:%M") }}<br>
-{% if event.is_cancelled %}
-<p style="color: red;">Tapahtuma peruttu</p>
-{% else %}
-Sijainti: {{ event.event_location }}<br>
-IN: {{ event.in_count }} <br>
-OUT: {{ event.out_count }} <br>
-<form action="/event_registration" method="post">
-    <button type="submit" name="status" value="IN" class="btn {% if event.current_status == 'IN' %}btn-success{% else %}btn-outline-success{% endif %}">IN</button>
-    <button type="submit" name="status" value="OUT" class="btn {% if event.current_status == 'OUT' %}btn-danger{% else %}btn-outline-danger{% endif %}">OUT</button>
-    <input type="hidden" name="event_id" value="{{ event.id }}">
-    <input type="hidden" name="user_id" value="{{ session.user_id }}">
-{% if event.current_status == 'IN' %}
-Olet IN
-{% elif event.current_status == 'OUT' %}
-Olet OUT
-{% else %}
-Et ole vielä ilmoittautunut tapahtumaan!
-{% endif %}
-</form>
-{% if session.coach %}
-<form action="/cancel_event/{{ event.id }}" method="post">
-    <button type="submit">Cancel Event</button>
-</form>
-{% endif %}
-</form>
-{% endif %}
+    <strong><a href="/event/{{ event.id }}">{{ event.event_type }}</a></strong> - {{ event.event_date.strftime("%Y-%m-%d") }} klo {{ event.event_start_time.strftime("%H:%M") }} - {{ event.event_end_time.strftime("%H:%M") }}<br>
+    {% if event.is_cancelled %}
+    <p style="color: red;">Tapahtuma peruttu</p>
+    {% else %}
+    Sijainti: {{ event.event_location }}<br>
+    {% if event.position_specific %}
+    <strong>Pelipaikkakohtainen: {{ event.position_specific }}</strong><br>
+    {% endif %}
+    IN: {{ event.in_count }} <br>
+    OUT: {{ event.out_count }} <br>
+    <form action="/event_registration" method="post">
+        <button type="submit" name="status" value="IN" class="btn {% if event.current_status == 'IN' %}btn-success{% else %}btn-outline-success{% endif %}">IN</button>
+        <button type="submit" name="status" value="OUT" class="btn {% if event.current_status == 'OUT' %}btn-danger{% else %}btn-outline-danger{% endif %}">OUT</button>
+        <input type="hidden" name="event_id" value="{{ event.id }}">
+        <input type="hidden" name="user_id" value="{{ session.user_id }}">
+        {% if event.current_status == 'IN' %}
+        Olet IN
+        {% elif event.current_status == 'OUT' %}
+        Olet OUT
+        {% else %}
+        Et ole vielä ilmoittautunut tapahtumaan!
+        {% endif %}
+    </form>
+    {% if session.coach %}
+    <form action="/cancel_event/{{ event.id }}" method="post">  
+        <button type="submit">Cancel Event</button>
+    </form>
+    {% endif %}
+    </form>
+    {% endif %}
 </li>
 <hr>
 {% endfor %}
