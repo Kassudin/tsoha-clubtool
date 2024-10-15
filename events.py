@@ -2,7 +2,7 @@ from db import db
 from sqlalchemy import text
 import users
 
-def create_event(event_type, event_date, event_start_time, event_end_time, event_location, event_description, position_specific=None):
+def create_event(event_type, event_date, event_start_time, event_end_time, event_location, event_description, position_specific):
     sql = text("""
         INSERT INTO events 
         (event_type, event_date, event_start_time, event_end_time, event_location, event_description, position_specific) 
@@ -16,7 +16,7 @@ def create_event(event_type, event_date, event_start_time, event_end_time, event
         "event_end_time": event_end_time,
         "event_location": event_location,
         "event_description": event_description,
-        "position_specific": position_specific
+        "position_specific": position_specific if position_specific else None
     })
     db.session.commit()
     return True
