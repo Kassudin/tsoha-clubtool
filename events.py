@@ -124,4 +124,4 @@ def update_event_db(event_id, event_type, event_date, event_start_time, event_en
         "event_id": event_id, "event_type": event_type, "event_date": event_date,
         "event_start_time": event_start_time, "event_end_time": event_end_time, "event_location": event_location, "event_description": event_description, "position_specific": position_specific
     })
-    db.session.commit()
+    db.session.commit() 

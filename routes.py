@@ -169,3 +169,27 @@ def cancel_event(event_id):
         return redirect("/")
     else:
         return render_template("error.html", message="Tapahtui virhe peruuttamisessa")
+
+@app.route("/edit_event/<int:event_id>")
+def edit_event(event_id):
+    if not users.is_coach():
+        return render_template("error.html", message="Vain valmentajat voivat muokata tapahtumia")
+    event = events.get_event_id(event_id)
+    if event:
+        return render_template("edit_event.html", event=event)
+    else:
+        return render_template("error.html", message= "Tapahtumaa ei löydy")
+
+@app.route("/update_event/<int:event_id>", methods=["POST"])
+def update_event(event_id):
+    if not users.is_coach():
+        return render_template("error.html", message="Ei oikeutta nähdä sivua")
+    event_type = request.form["event_type"]
+    event_date = request.form["event_date"]
+    event_start_time = request.form["event_start_time"]
+    event_end_time = request.form["event_end_time"]
+    event_location = request.form["event_location"]
+    event_description = request.form["event_description"]
+    position_specific = request.form["position_specific"]
+    events.update_event_db(event_id, event_type, event_date, event_start_time, event_end_time, event_location, event_description, position_specific)
+    return redirect("/")
