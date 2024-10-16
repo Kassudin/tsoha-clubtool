@@ -104,3 +104,11 @@ def get_user_status(event_id, user_id):
     if result:
         return result[0]
     return None
+
+def get_event_id(event_id):
+    sql = text(""" 
+        SELECT id, event_type, event_date, event_start_time, event_end_time, event_location, is_cancelled, position_specific
+        FROM events 
+        WHERE id = :event_id           
+    """)
+    return db.session.execute(sql, {"event_id": event_id}).fetchone()
