@@ -94,21 +94,38 @@ def create_event():
         return redirect("/")
     return render_template("error.html", message="Tapahtuman luominen epäonnistui")
 
-# Route to register the user to the event   
+# Route to register the user to the event  
 @app.route("/event_registration", methods=["POST"])
 def event_registration():
     if not users.user_id():
         return redirect("/login")
     event_id = request.form["event_id"]
-    status = request.form["status"]
+    status = request.form["status"] 
     user_id = users.user_id()
     events.register_user_to_event(event_id, user_id, status)
     return redirect("/")
 
+# Route to add a comment
+@app.route("/add_comment", methods=["POST"])
+def add_comment():
+    if not users.user_id():
+        return redirect("/login")
+    event_id = request.form["event_id"]
+    comment = request.form.get("comment", "")
+    user_id = users.user_id()
+    status = events.get_user_status(event_id, user_id)
+    if status not in ['IN', 'OUT']:
+        return render_template("error.html", message="Et voi lähettää kommenttia, ellet ole ilmoittautunut tapahtumaan.")
+    if not 1 <= len(comment) <= 30:
+        return render_template("error.html", message="Kommentin tulee olla 1-30 merkkiä pitkä.")
+    events.register_user_to_event(event_id, user_id, status, comment)
+    return redirect(f"/event/{event_id}")
+
 # Route to event details page
 @app.route("/event/<int:event_id>")
 def event_details(event_id):
-    event_info, in_list, out_list = events.get_event_details(event_id)
+    user_id = users.user_id()
+    event_info, in_list, out_list = events.get_event_details(event_id, user_id)
     return render_template("event_details.html", event=event_info, in_list=in_list, out_list=out_list)
 
 # Route to message creation page
