@@ -107,8 +107,21 @@ def get_user_status(event_id, user_id):
 
 def get_event_id(event_id):
     sql = text(""" 
-        SELECT id, event_type, event_date, event_start_time, event_end_time, event_location, is_cancelled, position_specific
+        SELECT id, event_type, event_date, event_start_time, event_end_time, event_location, event_description, position_specific
         FROM events 
         WHERE id = :event_id           
     """)
     return db.session.execute(sql, {"event_id": event_id}).fetchone()
+
+def update_event_db(event_id, event_type, event_date, event_start_time, event_end_time, event_location, event_description, position_specific):
+    sql = text("""
+        UPDATE events SET event_type=:event_type, event_date=:event_date, event_start_time=:event_start_time,
+        event_end_time=:event_end_time, event_location=:event_location, event_description=:event_description, position_specific=:position_specific
+        WHERE id = :event_id
+    """)
+    position_specific = position_specific if position_specific else None
+    db.session.execute(sql, {
+        "event_id": event_id, "event_type": event_type, "event_date": event_date,
+        "event_start_time": event_start_time, "event_end_time": event_end_time, "event_location": event_location, "event_description": event_description, "position_specific": position_specific
+    })
+    db.session.commit()
