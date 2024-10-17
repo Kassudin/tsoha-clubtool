@@ -35,4 +35,12 @@
     <li>{{ name }}</li>
 {% endfor %}
 </ul>
+{% if session.coach %}
+<form action="/add_external_player_to_event" method="POST">
+    <input type="hidden" name="event_id" value="{{ event.id }}">
+    <label for="external_player">Lisää ulkopuolinen pelaaja tapahtumaan:</label>
+    <p><input type="text" name="external_player" id="external_player" required></p>
+    <button type="submit" class="btn btn-outline-primary">Lisää tapahtumaan</button>
+</form>
+{% endif %}
 {% endblock %}  

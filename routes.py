@@ -193,3 +193,14 @@ def update_event(event_id):
     position_specific = request.form["position_specific"]
     events.update_event_db(event_id, event_type, event_date, event_start_time, event_end_time, event_location, event_description, position_specific)
     return redirect("/")
+
+@app.route("/add_external_player_to_event", methods=["POST"])
+def add_external_player_to_event():
+    if not users.is_coach():
+        return render_template("error.html", message="Ei oikeutta lisätä ulkopuolista pelaajaa")
+    event_id = request.form.get("event_id")
+    external_player = request.form.get("external_player")
+    if not 2 <= len(external_player) <= 30:
+        return render_template("error.html", message="Virheellinen nimi")
+    events.add_external_player_to_event(event_id, external_player)
+    return redirect(f"/event/{event_id}")   

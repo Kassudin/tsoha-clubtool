@@ -62,9 +62,9 @@ def get_event_details(event_id, user_id):
     """)
     event_info = db.session.execute(sql_event, {"event_id": event_id, "user_id": user_id}).fetchone()
     sql_registrations = text("""
-        SELECT u.player_name, er.status, er.comment 
+        SELECT COALESCE(u.player_name, er.external_player) AS player_name, er.status, er.comment
         FROM event_registrations er
-        JOIN users u ON u.id = er.user_id
+        LEFT JOIN users u ON u.id = er.user_id
         WHERE er.event_id = :event_id
     """)
     registrations = db.session.execute(sql_registrations, {"event_id": event_id}).fetchall()
@@ -125,3 +125,11 @@ def update_event_db(event_id, event_type, event_date, event_start_time, event_en
         "event_start_time": event_start_time, "event_end_time": event_end_time, "event_location": event_location, "event_description": event_description, "position_specific": position_specific
     })
     db.session.commit() 
+
+def add_external_player_to_event(event_id, player_name):
+    sql = text("""
+        INSERT INTO event_registrations (event_id, external_player, status)
+        VALUES (:event_id, :player_name, 'IN')
+    """)
+    db.session.execute(sql, {'event_id': event_id, 'player_name': player_name})
+    db.session.commit()
