@@ -26,6 +26,7 @@ CREATE TABLE event_registrations (
     event_id INTEGER REFERENCES events(id),
     status TEXT,
     comment TEXT,
+    external_player TEXT,
     UNIQUE (event_id, user_id)
 );
 CREATE TABLE messages (
