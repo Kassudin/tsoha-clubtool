@@ -88,25 +88,44 @@ def get_event_details(event_id, user_id):
     return event_info, in_list, out_list
 
 def get_registration_count(user_id):
-    sql = text("""
-        SELECT COUNT(*) 
-        FROM event_registrations er
-        JOIN events e ON er.event_id = e.id
-        WHERE er.user_id = :user_id AND e.is_cancelled = FALSE
-        AND (e.position_specific IS NULL OR e.position_specific = :user_position)
-    """)
-    result = db.session.execute(sql, {"user_id": user_id, "user_position": users.get_user_position(user_id)})
+    if users.is_coach():
+        sql = text("""
+            SELECT COUNT(*) 
+            FROM event_registrations er
+            JOIN events e ON er.event_id = e.id
+            WHERE er.user_id = :user_id 
+            AND e.is_cancelled = FALSE
+        """)
+        result = db.session.execute(sql, {"user_id": user_id})
+    else:
+        sql = text("""
+            SELECT COUNT(*) 
+            FROM event_registrations er
+            JOIN events e ON er.event_id = e.id
+            WHERE er.user_id = :user_id 
+            AND e.is_cancelled = FALSE
+            AND (e.position_specific IS NULL OR e.position_specific = :user_position)
+        """)
+        result = db.session.execute(sql, {"user_id": user_id, "user_position": users.get_user_position(user_id)})
     registration_count = result.fetchone()[0]
     return registration_count
 
 def get_total_events(user_id):
-    sql = text("""
-        SELECT COUNT(*) 
-        FROM events 
-        WHERE is_cancelled = FALSE
-        AND (position_specific IS NULL OR position_specific = :user_position)
-    """)
-    result = db.session.execute(sql, {"user_position":  users.get_user_position(user_id)})
+    if users.is_coach():
+        sql = text("""
+            SELECT COUNT(*) 
+            FROM events 
+            WHERE is_cancelled = FALSE
+        """)
+        result = db.session.execute(sql)
+    else:
+        sql = text("""
+            SELECT COUNT(*) 
+            FROM events 
+            WHERE is_cancelled = FALSE
+            AND (position_specific IS NULL OR position_specific = :user_position)
+        """)
+    result = db.session.execute(sql, {"user_position": users.get_user_position(user_id)})
     total_events = result.fetchone()[0]
     return total_events
 
