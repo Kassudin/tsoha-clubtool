@@ -8,12 +8,15 @@ import datetime
 def index():
     if not users.user_id:
         return render_template ("error.html", message="Ei oikeutta nähdä sivua")
-    event_list = events.get_list()
+    if users.is_coach():
+        event_list = events.get_list_coach()
+    else:
+        event_list = events.get_list()
     user_id = users.user_id()
     event_registration_count, total_events = events.get_registration_count(user_id), events.get_total_events(user_id)
     welcome_message = f"Hei {users.player_name(user_id)}, olet ilmoittautunut {event_registration_count}/{total_events} tapahtumaan!"
     return render_template("index.html", events = event_list, welcome_message=welcome_message)   
-        
+      
 # Route to login page 
 @app.route("/login", methods=["GET","POST"])
 def login():

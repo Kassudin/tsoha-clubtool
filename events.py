@@ -37,6 +37,21 @@ def get_list():
     result = db.session.execute(sql, {"user_id" : users.user_id(), "user_position" : users.get_user_position(users.user_id())})
     return result.fetchall() 
 
+def get_list_coach():
+    sql = text("""
+        SELECT e.id, e.event_type, e.event_date, e.event_start_time, e.event_end_time, e.event_location, e.is_cancelled,
+        COUNT(CASE WHEN er.status = 'IN' THEN 1 END) AS in_count,
+        COUNT(CASE WHEN er.status = 'OUT' THEN 1 END) AS out_count,
+        (SELECT status FROM event_registrations WHERE event_id = e.id AND user_id = :user_id) AS current_status,
+        e.position_specific
+        FROM events e
+        LEFT JOIN event_registrations er ON e.id = er.event_id
+        GROUP BY e.id
+        ORDER BY e.event_date ASC, e.event_start_time ASC
+    """)
+    result = db.session.execute(sql, {"user_id": users.user_id()})
+    return result.fetchall()
+
 def register_user_to_event(event_id, user_id, status, comment=None):
     sql = text("""
         INSERT INTO event_registrations (event_id, user_id, status, comment) 
