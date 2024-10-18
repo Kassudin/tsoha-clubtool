@@ -14,11 +14,13 @@
         <label for="comment">Lisätiedot osallistumisestasi:</label>
         <p><textarea name="comment" rows="1" cols="30"></textarea></p>
         <button type="submit" class="btn btn-outline-primary">Lähetä</button>
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     {% elif event.current_status == 'OUT' %}
         <p>Olet OUT</p>
         <label for="comment">Syy poissaololle:</label>
         <p><textarea name="comment" rows="1" cols="30"></textarea></p>
         <button type="submit" class="btn btn-outline-primary">Lähetä</button>
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     {% else %}
         <p>Et ole vielä ilmoittautunut tapahtumaan.</p>
     {% endif %}
@@ -41,6 +43,7 @@
     <label for="external_player">Lisää ulkopuolinen pelaaja tapahtumaan:</label>
     <p><input type="text" name="external_player" id="external_player" required></p>
     <button type="submit" class="btn btn-outline-primary">Lisää tapahtumaan</button>
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
 </form>
 {% endif %}
 {% endblock %}  

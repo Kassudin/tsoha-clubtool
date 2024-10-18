@@ -1,7 +1,8 @@
 from app import app
-from flask import render_template, request, redirect
+from flask import render_template, request, redirect, session, abort
 import users, events, messages
 import datetime
+import secrets
 
 # Route to front page
 @app.route("/")
@@ -26,6 +27,7 @@ def login():
         player_name = request.form["player_name"]
         password = request.form["password"]
         if users.login(player_name, password):
+            session["csrf_token"] = secrets.token_hex(16) 
             return redirect("/")
         return render_template("error.html", message="Väärä tunnus tai salasana")
                 
@@ -41,6 +43,8 @@ def register():
     if request.method == "GET":
         return render_template("register.html")
     if request.method == "POST":
+        if session["csrf_token"] != request.form["csrf_token"]:
+            abort(403)
         player_name = request.form["player_name"]
         password1= request.form["password1"]
         password2= request.form["password2"]
@@ -74,6 +78,8 @@ def new():
 def create_event():
     if not users.is_coach():
         return render_template("error.html", message="Vain valmentajat voivat luoda tapahtumia.")
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)
     event_type = request.form.get("event_type")
     event_date = request.form.get("event_date")
     event_start_time = request.form.get("event_start_time")
@@ -102,6 +108,8 @@ def create_event():
 def event_registration():
     if not users.user_id():
         return redirect("/login")
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)
     event_id = request.form["event_id"]
     status = request.form["status"] 
     user_id = users.user_id()
@@ -113,6 +121,8 @@ def event_registration():
 def add_comment():
     if not users.user_id():
         return redirect("/login")
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)
     event_id = request.form["event_id"]
     comment = request.form.get("comment", "")
     user_id = users.user_id()
@@ -147,6 +157,8 @@ def send_message():
         return redirect('/login')
     if not users.is_coach():
         return render_template("error.html", message="Vain valmentajat voivat lähettää viestejä.")
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)
     content = request.form.get("content")
     if not 1 <= len(content) <= 100:
         return render_template("error.html", message="Viestin tulee olla 1-100 merkkiä pitkä")
@@ -168,6 +180,8 @@ def view_messages():
 def cancel_event(event_id):
     if not users.is_coach():
         return render_template("error.html", message="Vain valmentajat voivat peruuttaa tapahtumia")
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)
     if events.cancel_event(event_id):
         return redirect("/")
     else:
@@ -187,6 +201,8 @@ def edit_event(event_id):
 def update_event(event_id):
     if not users.is_coach():
         return render_template("error.html", message="Ei oikeutta nähdä sivua")
+    if session["csrf_token"] != request.form["csrf_token"]:
+            abort(403)
     event_type = request.form["event_type"]
     event_date = request.form["event_date"]
     event_start_time = request.form["event_start_time"]
@@ -201,6 +217,8 @@ def update_event(event_id):
 def add_external_player_to_event():
     if not users.is_coach():
         return render_template("error.html", message="Ei oikeutta lisätä ulkopuolista pelaajaa")
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)
     event_id = request.form.get("event_id")
     external_player = request.form.get("external_player")
     if not 2 <= len(external_player) <= 30:

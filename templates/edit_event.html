@@ -15,7 +15,7 @@
     Tapahtumapaikka: <input type="text" name="event_location" value="{{ event.event_location }}"> 
     <p>
     Lisätiedot: <br>
-    <textarea name="event_description" value="{{ event.event_description}}" rows="4" cols="40">{{ event.event_description }}</textarea> 
+    <textarea name="event_description" rows="4" cols="40"> {{ event.event_description }}</textarea>  
     <p>
     Kenelle: 
     <select name="position_specific">
@@ -27,5 +27,6 @@
     </select>
     <p>
     <input type="submit" value="Muokkaa tapahtumaa">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
 </form>
 {% endblock %}

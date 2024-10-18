@@ -4,5 +4,6 @@
 <form method="POST">
     <textarea name="content" required></textarea><br>
     <input type="submit" value="Lähetä viesti">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
 </form>
 {% endblock %}

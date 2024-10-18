@@ -27,5 +27,6 @@
     </select>
     <p>
     <input type="submit" value="Luo tapahtuma">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
 </form>
 {% endblock %}
