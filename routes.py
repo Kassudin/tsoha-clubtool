@@ -43,8 +43,6 @@ def register():
     if request.method == "GET":
         return render_template("register.html")
     if request.method == "POST":
-        if session["csrf_token"] != request.form["csrf_token"]:
-            abort(403)
         player_name = request.form["player_name"]
         password1= request.form["password1"]
         password2= request.form["password2"]
@@ -59,6 +57,8 @@ def register():
             return render_template("error.html", message="Virheellinen pelipaikka")
         if not player_number.isdigit() or not (1 <= int(player_number) <= 99):
             return render_template("error.html", message="Pelaajanumeron tulee olla luku väliltä 1-99")
+        if not users.is_number_available(player_number):
+            return render_template("error.html", message="Pelinumero on jo käytössä")
         if users.register(player_name, password1, player_position, player_number):
             return redirect("/")
         return render_template("error.html", message="Tapahtui virhe rekisteröitymisessä")
@@ -81,7 +81,8 @@ def create_event():
     if session["csrf_token"] != request.form["csrf_token"]:
         abort(403)
     event_type = request.form.get("event_type")
-    event_date = request.form.get("event_date")
+    event_date_str = request.form['event_date']
+    event_date = datetime.datetime.strptime(event_date_str, '%Y-%m-%d').date()
     event_start_time = request.form.get("event_start_time")
     event_end_time = request.form.get("event_end_time")
     event_location = request.form.get("event_location")
@@ -90,10 +91,12 @@ def create_event():
     allowed_event_types = ["harjoitus", "ottelu", "muu"]
     if event_type not in allowed_event_types:
         return render_template("error.html", message="Virheellinen tapahtumatyyppi")
-    if not event_date:
+    if not event_date_str:
         return render_template("error.html", message="Päivämäärä on pakollinen")
     if not event_start_time or not event_end_time:
         return render_template("error.html", message="Aloitus- ja lopetusaika ovat pakollisia")
+    if event_date < datetime.datetime.now().date():
+        return render_template("error.html", message="Päivämäärä on mennyt jo")
     if not 1 <= len(event_location) <= 100:
         return render_template("error.html", message="Tapahtumapaikan tulee olla 1-100 merkkiä pitkä")
     if len(event_description) > 100:
@@ -203,13 +206,27 @@ def update_event(event_id):
         return render_template("error.html", message="Ei oikeutta nähdä sivua")
     if session["csrf_token"] != request.form["csrf_token"]:
             abort(403)
-    event_type = request.form["event_type"]
-    event_date = request.form["event_date"]
-    event_start_time = request.form["event_start_time"]
-    event_end_time = request.form["event_end_time"]
-    event_location = request.form["event_location"]
-    event_description = request.form["event_description"]
-    position_specific = request.form["position_specific"]
+    event_type = request.form.get("event_type")
+    event_date_str = request.form['event_date']
+    event_date = datetime.datetime.strptime(event_date_str, '%Y-%m-%d').date()
+    event_start_time = request.form.get("event_start_time")
+    event_end_time = request.form.get("event_end_time")
+    event_location = request.form.get("event_location")
+    event_description = request.form.get("event_description", "")  
+    position_specific = request.form.get("position_specific", None)
+    allowed_event_types = ["harjoitus", "ottelu", "muu"]
+    if event_type not in allowed_event_types:
+        return render_template("error.html", message="Virheellinen tapahtumatyyppi")
+    if not event_date_str:
+        return render_template("error.html", message="Päivämäärä on pakollinen")
+    if not event_start_time or not event_end_time:
+        return render_template("error.html", message="Aloitus- ja lopetusaika ovat pakollisia")
+    if event_date < datetime.datetime.now().date():
+        return render_template("error.html", message="Päivämäärä on mennyt jo")
+    if not 1 <= len(event_location) <= 100:
+        return render_template("error.html", message="Tapahtumapaikan tulee olla 1-100 merkkiä pitkä")
+    if len(event_description) > 100:
+        return render_template("error.html", message="Kuvaus on liian pitkä (max 100 merkkiä)")
     events.update_event_db(event_id, event_type, event_date, event_start_time, event_end_time, event_location, event_description, position_specific)
     return redirect("/")
 
