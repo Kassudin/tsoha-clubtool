@@ -117,6 +117,7 @@ def event_registration():
     return redirect("/")
 
 # Route to add a comment
+@app.route("/add_comment", methods=["POST"])
 def add_comment():
     if not users.user_id():
         return redirect("/login")
