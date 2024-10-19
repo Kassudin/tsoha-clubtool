@@ -193,7 +193,7 @@ def add_external_player_to_event(event_id, player_name):
         VALUES (:event_id, :player_name, 'IN')
     """)
     db.session.execute(sql, {
-        'event_id': event_id, 
-        'player_name': player_name
+        "event_id": event_id, 
+        "player_name": player_name
     })
     db.session.commit()
