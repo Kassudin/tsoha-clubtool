@@ -1,13 +1,15 @@
-from db import db
-from sqlalchemy import text
 import users
+from sqlalchemy import text
+from db import db
 
 def create_event(event_type, event_date, event_start_time, event_end_time, event_location, event_description, position_specific):
     sql = text("""
         INSERT INTO events 
-        (event_type, event_date, event_start_time, event_end_time, event_location, event_description, position_specific) 
+        (event_type, event_date, event_start_time, event_end_time, 
+        event_location, event_description, position_specific) 
         VALUES 
-        (:event_type, :event_date, :event_start_time, :event_end_time, :event_location, :event_description, :position_specific)
+        (:event_type, :event_date, :event_start_time, :event_end_time, 
+        :event_location, :event_description, :position_specific)
     """)
     db.session.execute(sql, {
         "event_type": event_type,
@@ -23,10 +25,12 @@ def create_event(event_type, event_date, event_start_time, event_end_time, event
 
 def get_list():
     sql = text("""
-        SELECT e.id, e.event_type, e.event_date, e.event_start_time, e.event_end_time, e.event_location, e.is_cancelled,
+        SELECT e.id, e.event_type, e.event_date, e.event_start_time, e.event_end_time, 
+        e.event_location, e.is_cancelled,
         COUNT(CASE WHEN er.status = 'IN' THEN 1 END) AS in_count,
         COUNT(CASE WHEN er.status = 'OUT' THEN 1 END) AS out_count,
-        (SELECT status FROM event_registrations WHERE event_id = e.id AND user_id = :user_id) AS current_status,
+        (SELECT status FROM event_registrations WHERE event_id = e.id 
+        AND user_id = :user_id) AS current_status,
         e.position_specific
         FROM events e
         LEFT JOIN event_registrations er ON e.id = er.event_id
@@ -34,15 +38,20 @@ def get_list():
         GROUP BY e.id
         ORDER BY e.event_date ASC, e.event_start_time ASC
     """)
-    result = db.session.execute(sql, {"user_id" : users.user_id(), "user_position" : users.get_user_position(users.user_id())})
+    result = db.session.execute(sql, {
+        "user_id": users.user_id(), 
+        "user_position": users.get_user_position(users.user_id())
+    })
     return result.fetchall() 
 
 def get_list_coach():
     sql = text("""
-        SELECT e.id, e.event_type, e.event_date, e.event_start_time, e.event_end_time, e.event_location, e.is_cancelled,
+        SELECT e.id, e.event_type, e.event_date, e.event_start_time, e.event_end_time, 
+        e.event_location, e.is_cancelled,
         COUNT(CASE WHEN er.status = 'IN' THEN 1 END) AS in_count,
         COUNT(CASE WHEN er.status = 'OUT' THEN 1 END) AS out_count,
-        (SELECT status FROM event_registrations WHERE event_id = e.id AND user_id = :user_id) AS current_status,
+        (SELECT status FROM event_registrations WHERE event_id = e.id 
+        AND user_id = :user_id) AS current_status,
         e.position_specific
         FROM events e
         LEFT JOIN event_registrations er ON e.id = er.event_id
@@ -70,7 +79,8 @@ def register_user_to_event(event_id, user_id, status, comment=None):
 
 def get_event_details(event_id, user_id):
     sql_event = text("""
-        SELECT e.id, e.event_type, e.event_date, e.event_start_time, e.event_end_time, e.event_location, e.event_description,
+        SELECT e.id, e.event_type, e.event_date, e.event_start_time, e.event_end_time, 
+        e.event_location, e.event_description,
         (SELECT status FROM event_registrations WHERE event_id = e.id AND user_id = :user_id) AS current_status
         FROM events e
         WHERE e.id = :event_id
@@ -106,7 +116,10 @@ def get_registration_count(user_id):
             AND e.is_cancelled = FALSE
             AND (e.position_specific IS NULL OR e.position_specific = :user_position)
         """)
-        result = db.session.execute(sql, {"user_id": user_id, "user_position": users.get_user_position(user_id)})
+        result = db.session.execute(sql, {
+            "user_id": user_id, 
+            "user_position": users.get_user_position(user_id)
+        })
     registration_count = result.fetchone()[0]
     return registration_count
 
@@ -125,7 +138,9 @@ def get_total_events(user_id):
             WHERE is_cancelled = FALSE
             AND (position_specific IS NULL OR position_specific = :user_position)
         """)
-    result = db.session.execute(sql, {"user_position": users.get_user_position(user_id)})
+        result = db.session.execute(sql, {
+            "user_position": users.get_user_position(user_id)
+        })
     total_events = result.fetchone()[0]
     return total_events
 
@@ -161,8 +176,14 @@ def update_event_db(event_id, event_type, event_date, event_start_time, event_en
     """)
     position_specific = position_specific if position_specific else None
     db.session.execute(sql, {
-        "event_id": event_id, "event_type": event_type, "event_date": event_date,
-        "event_start_time": event_start_time, "event_end_time": event_end_time, "event_location": event_location, "event_description": event_description, "position_specific": position_specific
+        "event_id": event_id, 
+        "event_type": event_type, 
+        "event_date": event_date,
+        "event_start_time": event_start_time, 
+        "event_end_time": event_end_time, 
+        "event_location": event_location, 
+        "event_description": event_description, 
+        "position_specific": position_specific
     })
     db.session.commit() 
 
@@ -171,5 +192,8 @@ def add_external_player_to_event(event_id, player_name):
         INSERT INTO event_registrations (event_id, external_player, status)
         VALUES (:event_id, :player_name, 'IN')
     """)
-    db.session.execute(sql, {'event_id': event_id, 'player_name': player_name})
+    db.session.execute(sql, {
+        'event_id': event_id, 
+        'player_name': player_name
+    })
     db.session.commit()
