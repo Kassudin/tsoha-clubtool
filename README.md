@@ -34,7 +34,7 @@ Kuvien lisääminnen tapahtumiin, valmentajan mahdollisuus muuttaa muiden ilmoit
 - Kuvien lisääminen tapahtumaan ei ollut mielekästä.
 - Mielestäni valmentajan tehtävä ei ole muuttaa pelaajien ilmoittautumisia, vaan pelaajien täytyy tehdä se itse.
 - Tässä toteutuksessa ei ollut järkevää luoda ilmoittautumisen sulkeutumista, koska sovellusta lähtökohtaisesti vain testataan, eikä tapahtumiin palata enää esim. seuraavana päivänä. Jos sovelluksen ottaisi käyttöön, voisi tämän toiminnallisuuden implementoida.
-- 
+
 Ohjeet sovelluksen testaamiseen:
 
 - Suorita komento:
