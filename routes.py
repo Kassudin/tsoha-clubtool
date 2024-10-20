@@ -70,6 +70,8 @@ def register():
 # Route to event creation page
 @app.route("/new_event")
 def new():
+    if not users.user_id():
+        return redirect("/login")
     if not users.is_coach():
         return render_template ("error.html", message="Ei oikeutta nähdä sivua")    
     return render_template("new_event.html")
@@ -77,6 +79,8 @@ def new():
 # Route to create a new event
 @app.route("/new_event", methods=["POST"])
 def create_event():
+    if not users.user_id():
+        return redirect("/login")
     if not users.is_coach():
         return render_template("error.html", message="Vain valmentajat voivat luoda tapahtumia.")
     if session["csrf_token"] != request.form["csrf_token"]:
@@ -143,6 +147,8 @@ def add_comment():
 # Route to event details page
 @app.route("/event/<int:event_id>")
 def event_details(event_id):
+    if not users.user_id():
+        return redirect("/login")
     user_id = users.user_id()
     event_info, in_list, out_list = events.get_event_details(event_id, user_id)
     return render_template("event_details.html", event=event_info, in_list=in_list, out_list=out_list)
@@ -150,6 +156,8 @@ def event_details(event_id):
 # Route to message creation page
 @app.route("/send_message")
 def send_message_form():
+    if not users.user_id():
+        return redirect("/login")
     if not users.is_coach():
         return render_template("error.html", message="Vain valmentajat voivat lähettää viestejä.")
     return render_template("send_message.html")
@@ -157,6 +165,8 @@ def send_message_form():
 # Route to send a new message
 @app.route("/send_message", methods=["POST"])
 def send_message():
+    if not users.user_id():
+        return redirect("/login")
     if not users.is_coach():
         return render_template("error.html", message="Vain valmentajat voivat lähettää viestejä.")
     if session["csrf_token"] != request.form["csrf_token"]:
@@ -180,6 +190,8 @@ def view_messages():
 # Route to cancel the event
 @app.route("/cancel_event/<int:event_id>", methods=["POST"])
 def cancel_event(event_id):
+    if not users.user_id():
+        return redirect("/login")
     if not users.is_coach():
         return render_template("error.html", message="Vain valmentajat voivat peruuttaa tapahtumia")
     if session["csrf_token"] != request.form["csrf_token"]:
@@ -191,6 +203,8 @@ def cancel_event(event_id):
 # Route to edit the event
 @app.route("/edit_event/<int:event_id>")
 def edit_event(event_id):
+    if not users.user_id():
+        return redirect("/login")
     if not users.is_coach():
         return render_template("error.html", message="Vain valmentajat voivat muokata tapahtumia")
     event = events.get_event_id(event_id)
@@ -233,6 +247,8 @@ def update_event(event_id):
 # Route to add an external player to the event
 @app.route("/add_external_player_to_event", methods=["POST"])
 def add_external_player_to_event():
+    if not users.user_id():
+        return redirect("/login")
     if not users.is_coach():
         return render_template("error.html", message="Ei oikeutta lisätä ulkopuolista pelaajaa")
     if session["csrf_token"] != request.form["csrf_token"]:
