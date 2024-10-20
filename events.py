@@ -204,6 +204,7 @@ def update_event_db(event_id, event_type, event_date, event_start_time, event_en
         "position_specific": position_specific
     })
     db.session.commit() 
+    return True
 
 def add_external_player_to_event(event_id, player_name):
     sql = text("""

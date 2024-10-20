@@ -228,7 +228,7 @@ def update_event(event_id):
         return render_template("error.html", message="Kuvaus on liian pitkä (max 100 merkkiä)")
     if events.update_event_db(event_id, event_type, event_date, event_start_time, event_end_time, event_location, event_description, position_specific):
         return redirect("/")
-    return render_template("error", message="Tapahtui virhe tapahtuman muokkaamisessa")
+    return render_template("error.html", message="Tapahtuman muokkaaminen epäonnistui")
 
 # Route to add an external player to the event
 @app.route("/add_external_player_to_event", methods=["POST"])
