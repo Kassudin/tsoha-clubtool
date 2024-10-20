@@ -25,19 +25,25 @@
         <p>Et ole vielä ilmoittautunut tapahtumaan.</p>
     {% endif %}
 </form>
-<h2>Osallistuvat:</h2>
-<ul>
-{% for name in in_list %}
-    <li>{{ name }}</li>
-{% endfor %}
-</ul>
-<h2>Ei osallistu:</h2>
-<ul>    
-{% for name in out_list %}
-    <li>{{ name }}</li>
-{% endfor %}
-</ul>
+<p class="attendees-title">OSALLISTUVAT:</p>
+<div class="attendees-box green-box">
+    <ul>
+        {% for reg in in_list %}
+        <li class="name-box {{ 'external-player' if reg.user_type == 'external' else '' }} {{ 'coach' if reg.coach else '' }}">
+            {{ reg.name }}{% if reg.comment %} ({{ reg.comment }}){% endif %}
+        {% endfor %}
+    </ul>
+</div>
+<p class="attendees-title">EI OSALLISTU:</p>
+<div class="attendees-box red-box">
+    <ul>
+        {% for reg in out_list %}
+        <li class="name-box {{ 'external-player' if reg.user_type == 'external' else '' }}">{{ reg.name }}{% if reg.comment %} ({{ reg.comment }}){% endif %}</li>
+        {% endfor %}
+    </ul>
+</div>
 {% if session.coach %}
+<p></p>
 <form action="/add_external_player_to_event" method="POST">
     <input type="hidden" name="event_id" value="{{ event.id }}">
     <label for="external_player">Lisää ulkopuolinen pelaaja tapahtumaan:</label>

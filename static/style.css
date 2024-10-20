@@ -1,0 +1,55 @@
+
+.attendees-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 30px
+}
+
+.attendees-box {
+    display: flex;
+    align-items: center; 
+    flex-wrap: wrap; 
+    padding: 10px;
+    border-radius: 10px;
+    margin: 10px 0;
+    border: 2px solid #ddd;
+}
+
+.green-box {
+    background-color: #e0f7e0; 
+}
+
+.red-box {
+    background-color: #f7e0e0; 
+}
+
+ul {
+    list-style-type: none; 
+    padding-left: 0; 
+    margin: 0;
+}
+
+.name-box {
+    display: inline-block;
+    padding: 5px 10px; 
+    margin: 5px;
+    color: rgb(0, 0, 0);
+    border-radius: 10px; 
+    font-size: 12px; 
+    border: 1px solid; 
+}
+
+.name-box:not(.external-player):not(.coach) {
+    background-color: #f1c27f; 
+    border-color: #86592d; 
+}
+
+.external-player {
+    background-color: #c0c0c0; 
+    border-color: #909090; 
+}
+
+.coach {
+    background-color: #63c9f8; 
+    border-color: #2e3d92;  
+}
