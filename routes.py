@@ -238,6 +238,8 @@ def update_event(event_id):
         return render_template("error.html", message="Aloitus- ja lopetusaika ovat pakollisia")
     if event_date < datetime.datetime.now().date():
         return render_template("error.html", message="Päivämäärä on mennyt jo")
+    if event_start_time > event_end_time:
+        return render_template("error.html", message="Tapahtuma ei voi loppua ennen kuin se alkaa")
     if not 1 <= len(event_location) <= 100:
         return render_template("error.html", message="Tapahtumapaikan tulee olla 1-100 merkkiä pitkä")
     if len(event_description) > 100:
