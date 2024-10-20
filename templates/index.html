@@ -32,10 +32,13 @@ Et ole vielä ilmoittautunut tapahtumaan!
 {% endif %}
 </form>
 {% if session.coach %}
-    <form action="/cancel_event/{{ event.id }}" method="post">  
-    <button type="submit">Cancel Event</button>
+<p>
+<form action="/cancel_event/{{ event.id }}" method="post" style="display: inline;">
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+    <button type="submit" class="link-style" onclick="return confirm('Haluatko varmasti peruuttaa tapahtuman?');">Peruuta tapahtuma</button> |
+</form>
 <a href="/edit_event/{{ event.id }}">Muokkaa tapahtuman tietoja</a>
+</p>
 </form>
 {% endif %}
 </form>
