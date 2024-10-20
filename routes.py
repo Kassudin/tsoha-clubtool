@@ -9,8 +9,8 @@ import messages
 # Route to front page
 @app.route("/")
 def index():
-    if not users.user_id:
-        return render_template ("error.html", message="Ei oikeutta nähdä sivua")
+    if not users.user_id():
+        return redirect("/login")
     if users.is_coach():
         event_list = events.get_list_coach()
     else:
