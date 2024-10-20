@@ -50,8 +50,8 @@ def register():
     player_number = request.form["player_number"]
     if password1 != password2:
         return render_template("error.html", message="Salasanat eroavat")
-    if not 4 <= len(password1) <= 24:
-        return render_template("error.html", message="Salasanan tulee olla 4-24 merkkiä pitkä")
+    if len(password1) < 4:
+        return render_template("error.html", message="Salasanan tulee olla vähintään 4 merkkiä pitkä")
     if not 2 <= len(player_name) <= 30:
         return render_template("error.html", message="Virheellinen nimi")
     if not users.is_name_available(player_name):
