@@ -1,12 +1,11 @@
 {% extends "layout.html" %}
-{% block title %}viestit{% endblock %}
+{% block title %}Viestit{% endblock %}
 {% block content %}
 {% if messages %}
     {% for message in messages %}
-        <div>
-            <p><strong>{{ message.player_name }}</strong>: {{ message.content }}</p>
-            <p>Lähetetty {{ message.sent_at.strftime("%Y-%m-%d %H:%M") }}</p>
-            <hr> 
+        <div class="border-bottom pb-2 mb-2">
+            <strong>{{ message.player_name }}</strong>: {{ message.content }}
+            <div>Lähetetty {{ message.sent_at.strftime("%Y-%m-%d %H:%M") }}</div>
         </div>
     {% endfor %}
 {% else %}

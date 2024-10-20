@@ -61,3 +61,12 @@ ul {
 .container {
     max-width: 800px;
 }
+
+.error {
+    color: red; 
+    font-weight: bold; 
+}
+
+.error-message {
+    color: inherit;
+}
