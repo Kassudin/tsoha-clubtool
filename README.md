@@ -24,7 +24,7 @@ Sovelluksen nykytila:
 - Valmentaja voi luoda uusia tapahtumia, muuttaa nykyisiä tapahtumia sekä peruuttaa tapahtumia. Valmentaja voi valita onko tapahtuma harjoitus/ottelu/muu.  
 - Valmentaja valitsee tapahtumalle päivämäärän sekä kellonajan (esim. 17:00-19:00). Valmentaja voi kirjoittaa tapahtuman kuvaukseen lisätietoja tapahtumasta, kuten tapahtumapaikka, harjoitteet yms.
 - Valmentaja näkee, ketä on ilmoittautunut tapahtumaan. Valmentaja voi myös itse ilmoittautua tapahtumaan. Valmentaja näkyy erivärisenä pelaajille. 
-- Valmentaja voi lisätä tapahtumaan joukkueen ulkopuolisia pelaajia sekä muuttaa pelaajien ilmoittautumisia. Ulkopuolinen pelaaja näkyy erivärisenä muille pelaajille.
+- Valmentaja voi lisätä tapahtumaan joukkueen ulkopuolisia pelaajia. Ulkopuolinen pelaaja näkyy erivärisenä muille pelaajille.
 - Valmentaja voi luoda tapahtumia, jotka näkyvät vain tietyille pelaajille (esim. Vain maalivahdeille).
 - Valmenta voi lähettää ilmoituksia, jotka näkyvät erillisellä sivulla.
 
