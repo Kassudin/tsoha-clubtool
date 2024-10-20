@@ -83,7 +83,6 @@ def create_event():
         abort(403)
     event_type = request.form.get("event_type")
     event_date_str = request.form['event_date']
-    event_date = datetime.datetime.strptime(event_date_str, '%Y-%m-%d').date()
     event_start_time = request.form.get("event_start_time")
     event_end_time = request.form.get("event_end_time")
     event_location = request.form.get("event_location")
@@ -96,6 +95,7 @@ def create_event():
         return render_template("error.html", message="Päivämäärä on pakollinen")
     if not event_start_time or not event_end_time:
         return render_template("error.html", message="Aloitus- ja lopetusaika ovat pakollisia")
+    event_date = datetime.datetime.strptime(event_date_str, '%Y-%m-%d').date()
     if event_date < datetime.datetime.now().date():
         return render_template("error.html", message="Päivämäärä on mennyt jo")
     if event_start_time > event_end_time:
