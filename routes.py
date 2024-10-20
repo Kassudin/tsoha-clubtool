@@ -59,6 +59,8 @@ def register():
     allowed_positions = ["maalivahti", "puolustaja", "keskikenttä", "hyökkääjä"]
     if player_position not in allowed_positions:
         return render_template("error.html", message="Virheellinen pelipaikka")
+    if not player_position:
+        return render_template("error.html", message="Pelipaikka on pakollinen")
     if not player_number.isdigit() or not 1 <= int(player_number) <= 99:
         return render_template("error.html", message="Pelinumeron tulee olla luku väliltä 1-99")
     if not users.is_number_available(player_number):
