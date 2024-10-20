@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% block title %}Tapahtumantiedot{% endblock %}
+{% block title %}Tapahtuman tiedot{% endblock %}
 {% block content %}
 <h1>Tapahtuman tiedot: {{ event.event_type }}</h1>
 <p>Päivämäärä: {{ event.event_date.strftime("%Y-%m-%d") }}</p>
@@ -38,7 +38,8 @@
 <div class="attendees-box red-box">
     <ul>
         {% for reg in out_list %}
-        <li class="name-box {{ 'external-player' if reg.user_type == 'external' else '' }}">{{ reg.name }}{% if reg.comment %} ({{ reg.comment }}){% endif %}</li>
+        <li class="name-box {{ 'external-player' if reg.user_type == 'external' else '' }} {{ 'coach' if reg.coach else '' }}">
+            {{ reg.name }}{% if reg.comment %} ({{ reg.comment }}){% endif %}
         {% endfor %}
     </ul>
 </div>
