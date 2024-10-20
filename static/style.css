@@ -53,3 +53,11 @@ ul {
     background-color: #63c9f8; 
     border-color: #2e3d92;  
 }
+
+.form-container {
+    max-width: 400px;
+}
+
+.container {
+    max-width: 800px;
+}
