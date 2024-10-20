@@ -54,6 +54,8 @@ def register():
         return render_template("error.html", message="Salasanan tulee olla 4-24 merkkiä pitkä")
     if not 3 <= len(player_name) <= 30:
         return render_template("error.html", message="Virheellinen nimi")
+    if not users.is_name_available(player_name):
+        return render_template("error.html", message="Nimi on jo käytössä")
     allowed_positions = ["maalivahti", "puolustaja", "keskikenttä", "hyökkääjä"]
     if player_position not in allowed_positions:
         return render_template("error.html", message="Virheellinen pelipaikka")

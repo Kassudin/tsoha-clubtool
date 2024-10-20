@@ -70,4 +70,8 @@ def get_user_position(user_id):
 
 def is_number_available(player_number):
     sql = text("SELECT 1 FROM user_details WHERE player_number = :number")
-    return db.session.execute(sql, {'number': player_number}).fetchone() is None
+    return db.session.execute(sql, {"number": player_number}).fetchone() is None
+
+def is_name_available(player_name):
+    sql = text("SELECT 1 FROM users WHERE player_name = :name")
+    return db.session.execute(sql, {"name": player_name}).fetchone() is None
