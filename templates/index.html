@@ -50,13 +50,5 @@ Et ole vielä ilmoittautunut tapahtumaan!
 {% else %}
 <p>Ei tulevia tapahtumia.</p>
 {% endif %}
-Olet kirjautunut sisään.
-{% if session.coach %}
-<a href="/new_event">Luo uusi tapahtuma</a> |
-<a href="/send_message">Lähetä viesti</a> |
-{% endif %}
-<a href="/logout">Kirjaudu ulos</a> 
-{% else %}
-<a href="/login">Kirjaudu sisään</a> 
 {% endif %}
 {% endblock %}
