@@ -52,7 +52,7 @@ def register():
         return render_template("error.html", message="Salasanat eroavat")
     if not 4 <= len(password1) <= 24:
         return render_template("error.html", message="Salasanan tulee olla 4-24 merkkiä pitkä")
-    if not 3 <= len(player_name) <= 30:
+    if not 2 <= len(player_name) <= 30:
         return render_template("error.html", message="Virheellinen nimi")
     if not users.is_name_available(player_name):
         return render_template("error.html", message="Nimi on jo käytössä")
@@ -81,14 +81,14 @@ def create_event():
         return render_template("error.html", message="Vain valmentajat voivat luoda tapahtumia.")
     if session["csrf_token"] != request.form["csrf_token"]:
         abort(403)
-    event_type = request.form.get("event_type")
+    event_type = request.form["event_type"]
     event_date_str = request.form['event_date']
     event_date = datetime.datetime.strptime(event_date_str, '%Y-%m-%d').date()
-    event_start_time = request.form.get("event_start_time")
-    event_end_time = request.form.get("event_end_time")
-    event_location = request.form.get("event_location")
-    event_description = request.form.get("event_description", "")  
-    position_specific = request.form.get("position_specific", None)
+    event_start_time = request.form["event_start_time"]
+    event_end_time = request.form["event_end_time"]
+    event_location = request.form["event_location"]
+    event_description = request.form["event_description", ""]  
+    position_specific = request.form["position_specific", None]
     allowed_event_types = ["harjoitus", "ottelu", "muu"]
     if event_type not in allowed_event_types:
         return render_template("error.html", message="Virheellinen tapahtumatyyppi")
@@ -130,7 +130,7 @@ def add_comment():
     if session["csrf_token"] != request.form["csrf_token"]:
         abort(403)
     event_id = request.form["event_id"]
-    comment = request.form.get("comment", "")
+    comment = request.form["comment", ""]
     user_id = users.user_id()
     status = events.get_user_status(event_id, user_id)
     if status not in ['IN', 'OUT']:
@@ -150,8 +150,6 @@ def event_details(event_id):
 # Route to message creation page
 @app.route("/send_message")
 def send_message_form():
-    if not users.user_id:
-        return redirect('/login')
     if not users.is_coach():
         return render_template("error.html", message="Vain valmentajat voivat lähettää viestejä.")
     return render_template("send_message.html")
@@ -207,14 +205,14 @@ def update_event(event_id):
         return render_template("error.html", message="Ei oikeutta nähdä sivua")
     if session["csrf_token"] != request.form["csrf_token"]:
         abort(403)
-    event_type = request.form.get("event_type")
+    event_type = request.form["event_type"]
     event_date_str = request.form['event_date']
     event_date = datetime.datetime.strptime(event_date_str, '%Y-%m-%d').date()
-    event_start_time = request.form.get("event_start_time")
-    event_end_time = request.form.get("event_end_time")
-    event_location = request.form.get("event_location")
-    event_description = request.form.get("event_description", "")  
-    position_specific = request.form.get("position_specific", None)
+    event_start_time = request.form["event_start_time"]
+    event_end_time = request.form["event_end_time"]
+    event_location = request.form["event_location"]
+    event_description = request.form["event_description", ""]  
+    position_specific = request.form["position_specific", None]
     allowed_event_types = ["harjoitus", "ottelu", "muu"]
     if event_type not in allowed_event_types:
         return render_template("error.html", message="Virheellinen tapahtumatyyppi")
@@ -228,8 +226,9 @@ def update_event(event_id):
         return render_template("error.html", message="Tapahtumapaikan tulee olla 1-100 merkkiä pitkä")
     if len(event_description) > 100:
         return render_template("error.html", message="Kuvaus on liian pitkä (max 100 merkkiä)")
-    events.update_event_db(event_id, event_type, event_date, event_start_time, event_end_time, event_location, event_description, position_specific)
-    return redirect("/")
+    if events.update_event_db(event_id, event_type, event_date, event_start_time, event_end_time, event_location, event_description, position_specific):
+        return redirect("/")
+    return render_template("error", message="Tapahtui virhe tapahtuman muokkaamisessa")
 
 # Route to add an external player to the event
 @app.route("/add_external_player_to_event", methods=["POST"])
@@ -238,8 +237,8 @@ def add_external_player_to_event():
         return render_template("error.html", message="Ei oikeutta lisätä ulkopuolista pelaajaa")
     if session["csrf_token"] != request.form["csrf_token"]:
         abort(403)
-    event_id = request.form.get("event_id")
-    external_player = request.form.get("external_player")
+    event_id = request.form["event.id"]
+    external_player = request.form["external_player"]
     if not 2 <= len(external_player) <= 30:
         return render_template("error.html", message="Virheellinen nimi")
     events.add_external_player_to_event(event_id, external_player)
