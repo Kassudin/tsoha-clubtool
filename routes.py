@@ -50,13 +50,15 @@ def register():
     player_number = request.form["player_number"]
     if password1 != password2:
         return render_template("error.html", message="Salasanat eroavat")
+    if not 4 <= len(password1) <= 24:
+        return render_template("error.html", message="Salasanan tulee olla 4-24 merkkiä pitkä")
     if not 3 <= len(player_name) <= 30:
         return render_template("error.html", message="Virheellinen nimi")
     allowed_positions = ["maalivahti", "puolustaja", "keskikenttä", "hyökkääjä"]
     if player_position not in allowed_positions:
         return render_template("error.html", message="Virheellinen pelipaikka")
     if not player_number.isdigit() or not 1 <= int(player_number) <= 99:
-        return render_template("error.html", message="Pelaajanumeron tulee olla luku väliltä 1-99")
+        return render_template("error.html", message="Pelinumeron tulee olla luku väliltä 1-99")
     if not users.is_number_available(player_number):
         return render_template("error.html", message="Pelinumero on jo käytössä")
     if users.register(player_name, password1, player_position, player_number):
