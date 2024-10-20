@@ -86,15 +86,33 @@ def get_event_details(event_id, user_id):
         WHERE e.id = :event_id
     """)
     event_info = db.session.execute(sql_event, {"event_id": event_id, "user_id": user_id}).fetchone()
+    
     sql_registrations = text("""
-        SELECT COALESCE(u.player_name, er.external_player) AS player_name, er.status, er.comment
+        SELECT COALESCE(u.player_name, er.external_player) AS player_name, 
+        er.status, er.comment, er.user_id, u.coach 
         FROM event_registrations er
         LEFT JOIN users u ON u.id = er.user_id
         WHERE er.event_id = :event_id
     """)
     registrations = db.session.execute(sql_registrations, {"event_id": event_id}).fetchall()
-    in_list = [f"{reg.player_name} ({reg.comment})" if reg.comment else reg.player_name for reg in registrations if reg.status == 'IN']
-    out_list = [f"{reg.player_name} ({reg.comment})" if reg.comment else reg.player_name for reg in registrations if reg.status == 'OUT']
+    in_list = [
+        {
+            "name": reg.player_name, 
+            "comment": reg.comment, 
+            "user_type": "external" if reg.user_id is None else "regular", 
+            "coach": reg.coach if reg.user_id is not None else False  
+        }
+        for reg in registrations if reg.status == 'IN'
+    ]
+    out_list = [
+        {
+            "name": reg.player_name, 
+            "comment": reg.comment, 
+            "user_type": "external" if reg.user_id is None else "regular", 
+            "coach": reg.coach if reg.user_id is not None else False  
+        }
+        for reg in registrations if reg.status == 'OUT'
+    ]
     return event_info, in_list, out_list
 
 def get_registration_count(user_id):
