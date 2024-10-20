@@ -1,9 +1,14 @@
 {% extends "layout.html" %}
-{% block title %}Lähetäviesti{% endblock %}
+{% block title %}Lähetä viesti{% endblock %}
 {% block content %}
-<form method="POST">
-    <textarea name="content" required></textarea><br>
-    <input type="submit" value="Lähetä viesti">
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-</form>
+<div class="container">
+    <form method="post" class="mt-3">
+        <div class="form-group">
+            <label for="content">Viesti:</label>
+            <textarea name="content" class="form-control" rows="3" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-outline-primary">Lähetä viesti</button>
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+    </form>
+</div>
 {% endblock %}

@@ -1,32 +1,63 @@
 {% extends "layout.html" %}
 {% block content %}
-<h1>Muokkaa tapahtumaa</h1>
-<form action="/update_event/{{ event.id }}" method="post">
-    Tapahtuma: <br>
-    <input type="radio" name="event_type" value="harjoitus" {% if event.event_type == 'harjoitus' %}checked{% endif %}> Harjoitus
-    <input type="radio" name="event_type" value="ottelu" {% if event.event_type == 'ottelu' %}checked{% endif %}> Ottelu
-    <input type="radio" name="event_type" value="muu" {% if event.event_type == 'muu' %}checked{% endif %}> Muu
-    <p>
-    Päivämäärä: <input type="date" name="event_date" value="{{ event.event_date.strftime('%Y-%m-%d') }}">
-    <p>
-    Tapahtuma alkaa: <input type="time" name="event_start_time" value="{{ event.event_start_time.strftime('%H:%M') }}">
-    Tapahtuma päättyy: <input type="time" name="event_end_time" value="{{ event.event_end_time.strftime('%H:%M') }}">
-    <p>
-    Tapahtumapaikka: <input type="text" name="event_location" value="{{ event.event_location }}"> 
-    <p>
-    Lisätiedot: <br>
-    <textarea name="event_description" rows="4" cols="40"> {{ event.event_description }}</textarea>  
-    <p>
-    Kenelle: 
-    <select name="position_specific">
-        <option value="" {% if event.position_specific == '' %}selected{% endif %}>Kaikille</option>
-        <option value="maalivahti" {% if event.position_specific == 'maalivahti' %}selected{% endif %}>Maalivahti</option>
-        <option value="puolustaja" {% if event.position_specific == 'puolustaja' %}selected{% endif %}>Puolustaja</option>
-        <option value="keskikenttä" {% if event.position_specific == 'keskikenttä' %}selected{% endif %}>Keskikenttä</option>
-        <option value="hyökkääjä" {% if event.position_specific == 'hyökkääjä' %}selected{% endif %}>Hyökkääjä</option>
-    </select>
-    <p>
-    <input type="submit" value="Muokkaa tapahtumaa">
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-</form>
+<div class="container">
+    <h1>Muokkaa tapahtumaa</h1>
+    <form action="/update_event/{{ event.id }}" method="post" class="mt-3">
+        <div class="form-group">
+            <label>Tapahtuma:</label>
+            <div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="event_type" id="harjoitus" value="harjoitus" {% if event.event_type == 'harjoitus' %}checked{% endif %}>
+                    <label class="form-check-label" for="harjoitus">Harjoitus</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="event_type" id="ottelu" value="ottelu" {% if event.event_type == 'ottelu' %}checked{% endif %}>
+                    <label class="form-check-label" for="ottelu">Ottelu</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="event_type" id="muu" value="muu" {% if event.event_type == 'muu' %}checked{% endif %}>
+                    <label class="form-check-label" for="muu">Muu</label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="event_date">Päivämäärä:</label>
+            <input type="date" class="form-control" name="event_date" value="{{ event.event_date.strftime('%Y-%m-%d') }}">
+        </div>
+        <div class="form-row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="event_start_time">Tapahtuma alkaa:</label>
+                    <input type="time" class="form-control" name="event_start_time" value="{{ event.event_start_time.strftime('%H:%M') }}">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="event_end_time">Tapahtuma päättyy:</label>
+                    <input type="time" class="form-control" name="event_end_time" value="{{ event.event_end_time.strftime('%H:%M') }}">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="event_location">Tapahtumapaikka:</label>
+            <input type="text" class="form-control" name="event_location" value="{{ event.event_location }}">
+        </div>
+        <div class="form-group">
+            <label for="event_description">Lisätiedot:</label>
+            <textarea class="form-control" name="event_description" rows="4">{{ event.event_description }}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="position_specific" class="mr-sm-2">Kenelle:</label>
+            <select name="position_specific" class="custom-select mr-sm-2">
+                <option value="">Kaikille</option>
+                <option value="maalivahti" {% if event.position_specific == 'maalivahti' %}selected{% endif %}>Maalivahti</option>
+                <option value="puolustaja" {% if event.position_specific == 'puolustaja' %}selected{% endif %}>Puolustaja</option>
+                <option value="keskikenttä" {% if event.position_specific == 'keskikenttä' %}selected{% endif %}>Keskikenttä</option>
+                <option value="hyökkääjä" {% if event.position_specific == 'hyökkääjä' %}selected{% endif %}>Hyökkääjä</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-outline-primary">Muokkaa tapahtumaa</button>
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+    </form>
+</div>
 {% endblock %}
