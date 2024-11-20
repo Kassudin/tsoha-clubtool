@@ -53,7 +53,6 @@ Ohjeet sovelluksen testaamiseen:
 - Luo hakemistoon tiedosto .env, jonka sisältö on seuraava:
   - DATABASE_URL = "osoite tietokantaan" 
   - SECRET_KEY = "avainkoodi"
-  - TEST_ENV = 'TRUE*
 - Ps. Voit luoda salaisen avaimen kävetävästi python tulkilla:
    ``` 
   $ python3
